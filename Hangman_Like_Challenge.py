@@ -7,6 +7,7 @@ def start_game():
     start_user_health = 6
     start_round_tracker = 1
     user_difficulty = 0
+    guessed_letters = ['none', 'a', 'b', 'z', 'c']
     difficulty_map = {1: "easy", 2: "average", 3: "insane"}
     easy_list = ["cat", "dog", "egg", "beef", "hand"]
     average_list = ["goodbye", "letter", "ground", "snow", "water"]
@@ -32,7 +33,8 @@ def start_game():
         game_wordlist = choice(insane_list)
     input("Press 'Enter' to start the game")
     game_word_blank = blank_maker(game_wordlist)
-    return game_wordlist, start_user_health, start_round_tracker, game_word_blank
+    valid_letters = approved_letters()
+    return game_wordlist, start_user_health, start_round_tracker, game_word_blank, valid_letters, guessed_letters
 
 
 def blank_maker(game_wordlist):
@@ -44,14 +46,22 @@ def blank_maker(game_wordlist):
     return game_word_blank
 
 
-def game_menu(game_word_blank, user_health, round_tracker):
-    valid_letters = approved_letters()
+def approved_letters():
+    lower_letters = string.ascii_lowercase
+    valid_letters = []
+    for letter in lower_letters:
+        valid_letters.append(letter)
+    return valid_letters
+
+
+def game_menu(game_word_blank, user_health, round_tracker, valid_letters, guessed_letters):
     valid_guess = False
+    letter_tracker = guessed_letter_sorter(guessed_letters)
     print("\n***********************************************")
     print(f"ROUND:{round_tracker}")
     print(f"Player Health:{user_health}")
     print(f"Word:{game_word_blank}")
-    # NEED TO ADD USED LETTERS
+    print(f"Guessed Letters: {letter_tracker}")
     print("************************************************")
     while not valid_guess:
         user_letter_choice = input("Guess a letter:")
@@ -63,24 +73,20 @@ def game_menu(game_word_blank, user_health, round_tracker):
                 break
             else:
                 continue
-    return valid_letters
+    return user_letter_choice, letter_tracker
 
 
-def approved_letters():
-    lower_letters = string.ascii_lowercase
-    valid_letters = []
-    for letter in lower_letters:
-        valid_letters.append(letter)
-    return valid_letters
-
+def guessed_letter_sorter(guessed_letters):
+    fixed_guess_string = ",".join(sorted(guessed_letters))
+    return fixed_guess_string
 
 # Test input
 game_over = False
-winning_word, user_health, round_tracker, game_word_blank = (start_game())
+winning_word, user_health, round_tracker, game_word_blank, valid_letters, guessed_letters = (start_game())
 
 while not game_over:
-    valid_letter = game_menu(game_word_blank, user_health, round_tracker)
-    game_over = True
+    valid_letter = game_menu(game_word_blank, user_health, round_tracker, valid_letters, guessed_letters)
+    #game_over = True
     # Make method that will compare letter, adjust blank, player health
 
 # More to follow, this is an ongoing work in progress.
