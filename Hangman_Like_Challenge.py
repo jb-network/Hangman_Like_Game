@@ -59,6 +59,7 @@ def game_menu(game_word_blank, user_health, round_tracker):
             if letter == user_letter_choice:
                 valid_guess = True
                 print(f"You selected the letter: {letter}")
+                print("************************************************")
                 break
             else:
                 continue
