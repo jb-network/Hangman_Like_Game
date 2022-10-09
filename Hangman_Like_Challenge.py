@@ -7,7 +7,7 @@ def start_game():
     start_user_health = 6
     start_round_tracker = 1
     user_difficulty = 0
-    guessed_letters = ['none', 'a', 'b', 'z', 'c']
+    guessed_letters = ['none']
     difficulty_map = {1: "easy", 2: "average", 3: "insane"}
     easy_list = ["cat", "dog", "egg", "beef", "hand"]
     average_list = ["goodbye", "letter", "ground", "snow", "water"]
@@ -70,23 +70,52 @@ def game_menu(game_word_blank, user_health, round_tracker, valid_letters, guesse
                 valid_guess = True
                 print(f"You selected the letter: {letter}")
                 print("************************************************")
+                letter_tracker_update = update_used_letters(guessed_letters, user_letter_choice)
                 break
             else:
                 continue
-    return user_letter_choice, letter_tracker
+    return valid_letters,letter_tracker_update, user_letter_choice, game_word_blank
 
 
 def guessed_letter_sorter(guessed_letters):
     fixed_guess_string = ",".join(sorted(guessed_letters))
     return fixed_guess_string
 
+def  update_used_letters(guessed_letters, user_letter_choice):
+    if guessed_letters[0] == 'none':
+        guessed_letters[0] = user_letter_choice
+    else:
+        guessed_letters.append(user_letter_choice)
+    return guessed_letters
+
+def game_updates(round_tracker, letter_tracker_update, valid_letter, user_letter_choice,game_word_blank,game_wordlist):
+    round_tracker += 1
+    guessed_letters == letter_tracker_update
+    valid_letter = valid_letter_update(valid_letter, user_letter_choice)
+    game_word_blank = word_blank_update(game_wordlist, game_word_blank, user_letter_choice)
+    return round_tracker, guessed_letters, valid_letter, game_word_blank
+
+def valid_letter_update(valid_letters, user_letter_choice):
+    for letter in valid_letters:
+        if letter == user_letter_choice:
+            valid_letters.remove(letter)
+    return valid_letters
+
+
+def word_blank_update(game_wordlist, game_word_blank, user_letter_choice):
+        #NEED TO FIX BLANKLIST TO BE A LIST RATHER THAN A STRING
+        return game_word_blank
+
 # Test input
 game_over = False
-winning_word, user_health, round_tracker, game_word_blank, valid_letters, guessed_letters = (start_game())
+game_wordlist, user_health, round_tracker, game_word_blank, valid_letters, guessed_letters= (start_game())
 
 while not game_over:
-    valid_letter = game_menu(game_word_blank, user_health, round_tracker, valid_letters, guessed_letters)
+
+    valid_letters, letter_tracker_update, user_letter_choice, game_word_blank = game_menu(game_word_blank, user_health, round_tracker, valid_letters, guessed_letters)
+    round_tracker, letter_tracker_update, valid_letters, game_word_blank = game_updates(round_tracker,letter_tracker_update, valid_letters, user_letter_choice, game_word_blank, game_wordlist)
     #game_over = True
+
     # Make method that will compare letter, adjust blank, player health
 
 # More to follow, this is an ongoing work in progress.
