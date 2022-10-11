@@ -1,7 +1,6 @@
 from random import choice
 import string
 
-
 def start_game():
     # Var List
     start_user_health = 6
@@ -12,7 +11,7 @@ def start_game():
     easy_list = ["cat", "dog", "egg", "beef", "hand"]
     average_list = ["goodbye", "letter", "ground", "snow", "water"]
     insane_list = ["gizmo", "peekaboo", "zigzagging", "fluffiness", "pneumonia"]
-
+    game_word_blank = []
     # User menu, use difficulty_map to unpack choices
     print("Welcome to Guess or Die")
     print("I will pick a word and you have 6 incorrect guesses to get it right or you die")
@@ -26,23 +25,21 @@ def start_game():
 
     # Pick a word based using random.choice and user selection
     if user_difficulty == 1:
-        game_wordlist = choice(easy_list)
+        game_wordlist = list(choice(easy_list))
     elif user_difficulty == 2:
-        game_wordlist = choice(average_list)
+        game_wordlist = list(choice(average_list))
     else:
-        game_wordlist = choice(insane_list)
+        game_wordlist = list(choice(insane_list))
     input("Press 'Enter' to start the game")
-    game_word_blank = blank_maker(game_wordlist)
+    game_word_blank = blank_maker(game_wordlist, game_word_blank)
     valid_letters = approved_letters()
     return game_wordlist, start_user_health, start_round_tracker, game_word_blank, valid_letters, guessed_letters
 
 
-def blank_maker(game_wordlist):
-    game_word_blank = ""
-    word_len_loop = 0
-    while word_len_loop < len(game_wordlist):
-        game_word_blank = game_word_blank + '-'
-        word_len_loop += 1
+def blank_maker(game_wordlist, game_word_blank):
+    game_word_blank = game_wordlist.copy()
+    for index, item in enumerate(game_word_blank):
+        game_word_blank[index] = "_"
     return game_word_blank
 
 
@@ -60,7 +57,8 @@ def game_menu(game_word_blank, user_health, round_tracker, valid_letters, guesse
     print("\n***********************************************")
     print(f"ROUND:{round_tracker}")
     print(f"Player Health:{user_health}")
-    print(f"Word:{game_word_blank}")
+    blank_display = print(*game_word_blank, sep = "")
+    print(f"Word: {blank_display}")
     print(f"Guessed Letters: {letter_tracker}")
     print("************************************************")
     while not valid_guess:
@@ -103,7 +101,9 @@ def valid_letter_update(valid_letters, user_letter_choice):
 
 
 def word_blank_update(game_wordlist, game_word_blank, user_letter_choice):
-        #NEED TO FIX BLANKLIST TO BE A LIST RATHER THAN A STRING
+        for index, item in enumerate(game_wordlist):
+            if user_letter_choice == game_wordlist[index]:
+                game_word_blank[index] = user_letter_choice
         return game_word_blank
 
 # Test input
