@@ -122,8 +122,6 @@ def word_blank_update(game_wordlist, game_word_blank, user_letter_choice, fully_
                 fully_matched = True
         return game_word_blank, fully_matched, remove_health_tracker
 
-
-
 game_wordlist, user_health, round_tracker, game_word_blank, valid_letters, guessed_letters, fully_matched, game_over, remove_health_tracker = (start_game())
 
 while not game_over:
